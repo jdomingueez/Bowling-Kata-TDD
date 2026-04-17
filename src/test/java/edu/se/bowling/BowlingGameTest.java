@@ -63,4 +63,20 @@ public class BowlingGameTest {
 			g.roll(pins);
 		}
 	}
+
+	@Test
+	private void testSpareInLastFrame() {
+    	Game game = new Game();
+
+    	for (int i = 0; i < 9; i++) {
+        	game.roll(0);
+        	game.roll(0);
+    	}
+
+    	game.roll(5);
+    	game.roll(5);
+    	game.roll(7);
+
+    	assertEquals(17, game.score());
+	}
 }

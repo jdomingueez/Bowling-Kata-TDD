@@ -15,6 +15,9 @@ public class Game {
 		if (pins > 10) {
         	throw new IllegalArgumentException("Pins cannot be greater than 10");
     	}
+    	if (currentRoll % 2 == 1 && rolls[currentRoll - 1] != 10 && rolls[currentRoll - 1] + pins > 10) {
+        	throw new IllegalArgumentException("Frame cannot exceed 10 pins");
+    	}
     	rolls[currentRoll++] = pins;
 	}
 

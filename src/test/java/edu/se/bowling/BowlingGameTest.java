@@ -109,4 +109,11 @@ public class BowlingGameTest {
     	Game game = new Game();
     	assertThrows(IllegalArgumentException.class, () -> game.roll(11));
 	}
+
+	@Test
+	void testFrameCannotExceedTenPins() {
+    	Game game = new Game();
+    	game.roll(8);
+    	assertThrows(IllegalArgumentException.class, () -> game.roll(5));
+	}
 }

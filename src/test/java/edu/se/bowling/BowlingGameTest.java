@@ -127,4 +127,71 @@ public class BowlingGameTest {
 
     	assertThrows(IllegalStateException.class, () -> game.roll(1));
 	}
+
+	@Test
+	void testCannotRollMoreThanThreeTimesInTenthFrameAfterStrike() {
+    	Game game = new Game();
+
+    	for (int i = 0; i < 9; i++) {
+        	game.roll(0);
+        	game.roll(0);
+    	}
+
+    	game.roll(10);
+    	game.roll(10);
+    	game.roll(10);
+
+    	assertThrows(IllegalStateException.class, () -> game.roll(1));
+	}
+
+	@Test
+	void testCannotRollExtraBallWithoutSpareOrStrikeInTenthFrame() {
+    	Game game = new Game();
+
+    	for (int i = 0; i < 9; i++) {
+        	game.roll(0);
+        	game.roll(0);
+    	}
+
+    	game.roll(3);
+    	game.roll(6);
+
+    	assertThrows(IllegalStateException.class, () -> game.roll(1));
+	}
+
+	@Test
+	void testMixedGameScore() {
+    	Game game = new Game();
+
+    	game.roll(1);
+    	game.roll(4);
+
+    	game.roll(4);
+    	game.roll(5);
+
+    	game.roll(6);
+    	game.roll(4);
+
+    	game.roll(5);
+    	game.roll(5);
+
+    	game.roll(10);
+
+    	game.roll(0);
+    	game.roll(1);
+
+    	game.roll(7);
+    	game.roll(3);
+
+    	game.roll(6);
+    	game.roll(4);
+
+    	game.roll(10);
+
+    	game.roll(2);
+    	game.roll(8);
+    	game.roll(6);
+
+    	assertEquals(133, game.score());
+	}
 }

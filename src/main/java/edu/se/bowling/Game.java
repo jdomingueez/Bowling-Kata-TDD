@@ -63,17 +63,15 @@ private void validatePins(int pins) {
 
     int rollIndex = 0;
 
-    // Solo validamos los 9 primeros frames aquí
     for (int frame = 0; frame < 9; frame++) {
         if (rollIndex == currentRoll) {
-            return; // primera tirada de este frame
+            return;
         }
 
         if (rolls[rollIndex] == 10) {
-            rollIndex++; // strike
+            rollIndex++; 
         } else {
             if (rollIndex + 1 == currentRoll) {
-                // estamos metiendo la segunda tirada de este frame
                 if (rolls[rollIndex] + pins > 10) {
                     throw new IllegalArgumentException("Frame cannot exceed 10 pins");
                 }
@@ -83,9 +81,7 @@ private void validatePins(int pins) {
         }
     }
 
-    // Si llegamos aquí, estamos en el décimo frame o en bonus rolls.
-    // De momento no aplicamos la regla de suma <= 10 aquí,
-    // porque en el décimo frame tras strike puede haber 10 + 10 + 10.
+
 }
 
 	private boolean isGameOver() {
@@ -106,7 +102,6 @@ private void validatePins(int pins) {
         	}
     	}
 
-    // Décimo frame
     	if (rollIndex >= currentRoll) {
         	return false;
     	}

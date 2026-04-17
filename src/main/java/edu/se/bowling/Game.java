@@ -9,15 +9,12 @@ public class Game {
 	private int currentRoll = 0;
 
 	public void roll(int pins) {
-    	if (pins < 0) {
-        	throw new IllegalArgumentException("Pins cannot be negative");
+    	validatePins(pins);
+
+    	if (isGameOver()) {
+        	throw new IllegalStateException("Cannot roll after game is over");
     	}
-		if (pins > 10) {
-        	throw new IllegalArgumentException("Pins cannot be greater than 10");
-    	}
-    	if (currentRoll % 2 == 1 && rolls[currentRoll - 1] != 10 && rolls[currentRoll - 1] + pins > 10) {
-        	throw new IllegalArgumentException("Frame cannot exceed 10 pins");
-    	}
+
     	rolls[currentRoll++] = pins;
 	}
 
@@ -53,6 +50,84 @@ public class Game {
 
 	private boolean isSpare(int frameRollIdx) {
 		return rolls[frameRollIdx] + rolls[frameRollIdx + 1] == NUMBER_OF_PINS;
+	}
+
+private void validatePins(int pins) {
+    if (pins < 0) {
+        throw new IllegalArgumentException("Pins cannot be negative");
+    }
+
+    if (pins > 10) {
+        throw new IllegalArgumentException("Pins cannot be greater than 10");
+    }
+
+    int rollIndex = 0;
+
+    // Solo validamos los 9 primeros frames aquí
+    for (int frame = 0; frame < 9; frame++) {
+        if (rollIndex == currentRoll) {
+            return; // primera tirada de este frame
+        }
+
+        if (rolls[rollIndex] == 10) {
+            rollIndex++; // strike
+        } else {
+            if (rollIndex + 1 == currentRoll) {
+                // estamos metiendo la segunda tirada de este frame
+                if (rolls[rollIndex] + pins > 10) {
+                    throw new IllegalArgumentException("Frame cannot exceed 10 pins");
+                }
+                return;
+            }
+            rollIndex += 2;
+        }
+    }
+
+    // Si llegamos aquí, estamos en el décimo frame o en bonus rolls.
+    // De momento no aplicamos la regla de suma <= 10 aquí,
+    // porque en el décimo frame tras strike puede haber 10 + 10 + 10.
+}
+
+	private boolean isGameOver() {
+    	int rollIndex = 0;
+
+    	for (int frame = 0; frame < 9; frame++) {
+        	if (rollIndex >= currentRoll) {
+            	return false;
+        	}
+
+        	if (rolls[rollIndex] == 10) {
+            	rollIndex++;
+        	} else {
+            	if (rollIndex + 1 >= currentRoll) {
+                	return false;
+            	}	
+            	rollIndex += 2;
+        	}
+    	}
+
+    // Décimo frame
+    	if (rollIndex >= currentRoll) {
+        	return false;
+    	}
+
+    	int firstRoll = rolls[rollIndex];
+
+    	if (firstRoll == 10) {
+        	return currentRoll >= rollIndex + 3;
+    	}
+
+    	if (rollIndex + 1 >= currentRoll) {
+        	return false;
+    	}
+
+    	int secondRoll = rolls[rollIndex + 1];
+
+    	if (firstRoll + secondRoll == 10) {
+        	return currentRoll >= rollIndex + 3;
+    	}
+
+    	return currentRoll >= rollIndex + 2;
 	}
 
 }

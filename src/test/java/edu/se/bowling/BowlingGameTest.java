@@ -116,4 +116,15 @@ public class BowlingGameTest {
     	game.roll(8);
     	assertThrows(IllegalArgumentException.class, () -> game.roll(5));
 	}
+
+	@Test
+	void testCannotRollAfterGameIsOver() {
+    	Game game = new Game();
+
+    	for (int i = 0; i < 20; i++) {
+        	game.roll(0);
+    	}
+
+    	assertThrows(IllegalStateException.class, () -> game.roll(1));
+	}
 }

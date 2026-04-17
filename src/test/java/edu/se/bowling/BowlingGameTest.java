@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BowlingGameTest {
 
@@ -65,7 +66,7 @@ public class BowlingGameTest {
 	}
 
 	@Test
-	private void testSpareInLastFrame() {
+	void testSpareInLastFrame() {
     	Game game = new Game();
 
     	for (int i = 0; i < 9; i++) {
@@ -78,5 +79,34 @@ public class BowlingGameTest {
     	game.roll(7);
 
     	assertEquals(17, game.score());
+	}
+
+	@Test
+	void testStrikeInLastFrame() {
+    	Game game = new Game();
+
+    	for (int i = 0; i < 9; i++) {
+        	game.roll(0);
+        	game.roll(0);
+    	}
+
+    	game.roll(10);
+    	game.roll(7);
+    	game.roll(2);
+
+    	assertEquals(19, game.score());
+	}
+
+	@Test
+	void testNegativeRollThrowsException() {
+    	Game game = new Game();
+
+    	assertThrows(IllegalArgumentException.class, () -> game.roll(-1));
+	}
+
+	@Test
+	void testRollGreaterThanTenThrowsException() {
+    	Game game = new Game();
+    	assertThrows(IllegalArgumentException.class, () -> game.roll(11));
 	}
 }

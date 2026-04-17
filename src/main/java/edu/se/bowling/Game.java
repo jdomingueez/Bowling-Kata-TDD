@@ -9,7 +9,13 @@ public class Game {
 	private int currentRoll = 0;
 
 	public void roll(int pins) {
-		rolls[currentRoll++] = pins;
+    	if (pins < 0) {
+        	throw new IllegalArgumentException("Pins cannot be negative");
+    	}
+		if (pins > 10) {
+        	throw new IllegalArgumentException("Pins cannot be greater than 10");
+    	}
+    	rolls[currentRoll++] = pins;
 	}
 
 	public int score() {
